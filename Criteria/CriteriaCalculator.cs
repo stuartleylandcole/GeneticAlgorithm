@@ -2,21 +2,21 @@ using System.Collections.Generic;
 
 namespace GeneticAlgorithm.Criteria
 {
-    public class CriteriaCalculator<T, U> where T : IOrganism<U> where U : IChromosome
+    public class CriteriaCalculator<TOrganism, TChromosome> where TOrganism : IOrganism<TChromosome> where TChromosome : IChromosome
     {
-        private readonly T _entity;
-        private readonly IEnumerable<CriteriaBase<T, U>> _criteria;
+        private readonly TOrganism _entity;
+        private readonly IEnumerable<CriteriaBase<TOrganism, TChromosome>> _criteria;
 
-        public CriteriaCalculator(T entity, IEnumerable<CriteriaBase<T, U>> criteria)
+        public CriteriaCalculator(TOrganism entity, IEnumerable<CriteriaBase<TOrganism, TChromosome>> criteria)
         {
             _entity = entity;
             _criteria = criteria;
         }
 
-        public CriteriaCalculatorResult<T, U> Calculate()
+        public CriteriaCalculatorResult<TOrganism, TChromosome> Calculate()
         {
-            var matchedCriteria = new List<CriteriaBase<T, U>>();
-            var failedCriteria = new List<CriteriaBase<T, U>>();
+            var matchedCriteria = new List<CriteriaBase<TOrganism, TChromosome>>();
+            var failedCriteria = new List<CriteriaBase<TOrganism, TChromosome>>();
             int score = 0;
 
             foreach (var criteria in _criteria)
@@ -33,7 +33,7 @@ namespace GeneticAlgorithm.Criteria
                 }
             }
 
-            return new CriteriaCalculatorResult<T, U>(matchedCriteria, failedCriteria, score);
+            return new CriteriaCalculatorResult<TOrganism, TChromosome>(matchedCriteria, failedCriteria, score);
         }
     }
 }

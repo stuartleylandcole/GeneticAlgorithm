@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GeneticAlgorithm
 {
-    public interface IChromosome// : IEnumerable<IGene>
+    public interface IChromosome
     {
         IEnumerable<IGene> Genes { get; }
     }

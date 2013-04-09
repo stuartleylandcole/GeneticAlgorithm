@@ -2,13 +2,13 @@ using System.Collections.Generic;
 
 namespace GeneticAlgorithm.Criteria
 {
-    public class CriteriaCalculatorResult<T, U> where T : IOrganism<U> where U : IChromosome
+    public class CriteriaCalculatorResult<TOrganism, TChromosome> where TOrganism : IOrganism<TChromosome> where TChromosome : IChromosome
     {
-        private readonly List<CriteriaBase<T, U>> _matchingCriteria;
-        private readonly List<CriteriaBase<T, U>> _failedCriteria;
+        private readonly List<CriteriaBase<TOrganism, TChromosome>> _matchingCriteria;
+        private readonly List<CriteriaBase<TOrganism, TChromosome>> _failedCriteria;
         private readonly int _score;
 
-        public CriteriaCalculatorResult(List<CriteriaBase<T, U>> matchingCriteria, List<CriteriaBase<T, U>> failedCriteria, int score)
+        public CriteriaCalculatorResult(List<CriteriaBase<TOrganism, TChromosome>> matchingCriteria, List<CriteriaBase<TOrganism, TChromosome>> failedCriteria, int score)
         {
             _matchingCriteria = matchingCriteria;
             _failedCriteria = failedCriteria;
@@ -25,12 +25,12 @@ namespace GeneticAlgorithm.Criteria
             get { return _score; }
         }
 
-        public List<CriteriaBase<T, U>> MatchingCriteria
+        public List<CriteriaBase<TOrganism, TChromosome>> MatchingCriteria
         {
             get { return _matchingCriteria; }
         }
 
-        public List<CriteriaBase<T, U>> FailedCriteria
+        public List<CriteriaBase<TOrganism, TChromosome>> FailedCriteria
         {
             get { return _failedCriteria; }
         }

@@ -6,14 +6,16 @@ using GeneticAlgorithm.SelectionStrategy;
 
 namespace GeneticAlgorithm
 {
-    public class PopulationGenerator<T, U> where T : IOrganism<U> where U : IChromosome
+    public class PopulationGenerator<TOrganism, TChromosome> where TOrganism : IOrganism<TChromosome> where TChromosome : IChromosome
     {
-        private readonly List<T> _parents;
+        private readonly List<TOrganism> _parents;
         private readonly int _numberOfChildrenToCreate;
-        private readonly ICrossoverStrategy<T, U> _crossoverStrategy;
-        private readonly ISelectionStrategy<T, U> _selectionStrategy;
+        private readonly ICrossoverStrategy<TOrganism, TChromosome> _crossoverStrategy;
+        private readonly ISelectionStrategy<TOrganism, TChromosome> _selectionStrategy;
 
-        public PopulationGenerator(List<T> parents, int numberOfChildrenToCreate, ICrossoverStrategy<T, U> crossoverStrategy, ISelectionStrategy<T, U> selectionStrategy)
+        public PopulationGenerator(List<TOrganism> parents, int numberOfChildrenToCreate, 
+                                  ICrossoverStrategy<TOrganism, TChromosome> crossoverStrategy, 
+                                  ISelectionStrategy<TOrganism, TChromosome> selectionStrategy)
         {
             _parents = parents;
             _numberOfChildrenToCreate = numberOfChildrenToCreate;
@@ -21,9 +23,9 @@ namespace GeneticAlgorithm
             _selectionStrategy = selectionStrategy;
         }
 
-        public List<T> Generate()
+        public List<TOrganism> Generate()
         {
-            var newPopulation = new List<T>();
+            var newPopulation = new List<TOrganism>();
             for (int i = 0; i < _numberOfChildrenToCreate; i++)
             {
                 var parent1 = _selectionStrategy.SelectParent(_parents);
@@ -36,11 +38,11 @@ namespace GeneticAlgorithm
             return newPopulation;
         }
 
-        public string GetStatistics(IEnumerable<CriteriaBase<T, U>> criteria)
+        public string GetStatistics(IEnumerable<CriteriaBase<TOrganism, TChromosome>> criteria)
         {
-            var average = _parents.Average(season => new CriteriaCalculator<T, U>(season, criteria).Calculate().Score);
-            var min = _parents.Min(season => new CriteriaCalculator<T, U>(season, criteria).Calculate().Score);
-            var max = _parents.Max(season => new CriteriaCalculator<T, U>(season, criteria).Calculate().Score);
+            var average = _parents.Average(season => new CriteriaCalculator<TOrganism, TChromosome>(season, criteria).Calculate().Score);
+            var min = _parents.Min(season => new CriteriaCalculator<TOrganism, TChromosome>(season, criteria).Calculate().Score);
+            var max = _parents.Max(season => new CriteriaCalculator<TOrganism, TChromosome>(season, criteria).Calculate().Score);
 
             return "Min: " + min + ". Max: " + max + ". Average: " + average;
         }

@@ -2,8 +2,8 @@ using System.Collections.Generic;
 
 namespace GeneticAlgorithm
 {
-    public interface IOrganism<T> where T : IChromosome
+    public interface IOrganism<TChromosome> where TChromosome : IChromosome
     {
-        IEnumerable<T> Chromosomes { get; }
+        IEnumerable<TChromosome> Chromosomes { get; }
     }
 }

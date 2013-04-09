@@ -2,8 +2,8 @@ using System.Collections.Generic;
 
 namespace GeneticAlgorithm.SelectionStrategy
 {
-    public interface ISelectionStrategy<T, U> where T : IOrganism<U> where U : IChromosome
+    public interface ISelectionStrategy<TOrganism, TChromosome> where TOrganism : IOrganism<TChromosome> where TChromosome : IChromosome
     {
-        T SelectParent(IList<T> parents);
+        TOrganism SelectParent(IList<TOrganism> parents);
     }
 }

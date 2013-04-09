@@ -1,8 +1,8 @@
 namespace GeneticAlgorithm.CrossoverStrategy
 {
-    public class SimpleCrossoverStrategy<T, U> : ICrossoverStrategy<T, U> where T: IOrganism<U> where U : IChromosome
+    public class SimpleCrossoverStrategy<TOrganism, TChromosome> : ICrossoverStrategy<TOrganism, TChromosome> where TOrganism: IOrganism<TChromosome> where TChromosome : IChromosome
     {
-        public T CrossOver(T parent1, T parent2)
+        public TOrganism CrossOver(TOrganism parent1, TOrganism parent2)
         {
             return parent1;
         }

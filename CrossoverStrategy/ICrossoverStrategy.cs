@@ -1,7 +1,7 @@
 namespace GeneticAlgorithm.CrossoverStrategy
 {
-    public interface ICrossoverStrategy<T, U> where T : IOrganism<U> where U : IChromosome
+    public interface ICrossoverStrategy<TOrganism, TChromosome> where TOrganism : IOrganism<TChromosome> where TChromosome : IChromosome
     {
-        T CrossOver(T parent1, T parent2);
+        TOrganism CrossOver(TOrganism parent1, TOrganism parent2);
     }
 }

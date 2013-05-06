@@ -7,5 +7,6 @@ namespace GeneticAlgorithm
 {
     public interface IGene
     {
+        bool IsSameAs(IGene other);
     }
 }

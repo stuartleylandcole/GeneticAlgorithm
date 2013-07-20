@@ -1,17 +1,15 @@
-using System;
 using System.Collections.Generic;
+using GeneticAlgorithm.SelectionStrategy.Selectors;
 
 namespace GeneticAlgorithm.SelectionStrategy
 {
-    public class SimpleSelectionStrategy<TOrganism, TChromosome> : ISelectionStrategy<TOrganism, TChromosome> where TOrganism : IOrganism<TChromosome> where TChromosome : IChromosome
+    public class SimpleSelectionStrategy<TOrganism, TChromosome> : ISelectionStrategy<TOrganism, TChromosome> 
+        where TOrganism : IOrganism<TChromosome> 
+        where TChromosome : IChromosome
     {
-        // ReSharper disable StaticFieldInGenericType
-        private static readonly Random Random = new Random();
-        // ReSharper restore StaticFieldInGenericType
-
-        public TOrganism SelectParent(IList<TOrganism> parents)
+        public TOrganism SelectParent(IList<TOrganism> parents, ISelector selector)
         {
-            return parents[Random.Next(0, parents.Count - 1)];
+            return parents[selector.SelectInt(parents.Count - 1)];
         }
     }
 }

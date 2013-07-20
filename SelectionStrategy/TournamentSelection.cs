@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GeneticAlgorithm.Criteria;
+using GeneticAlgorithm.SelectionStrategy.Selectors;
 
 namespace GeneticAlgorithm.SelectionStrategy
 {
@@ -10,10 +11,6 @@ namespace GeneticAlgorithm.SelectionStrategy
         where TOrganism : IOrganism<TChromosome> 
         where TChromosome : IChromosome
     {
-        // ReSharper disable StaticFieldInGenericType
-        private static readonly Random Random = new Random();
-        // ReSharper restore StaticFieldInGenericType
-
         private readonly double _selectionLimit;
         private readonly IEnumerable<CriteriaBase<TOrganism, TChromosome>> _criteria;
 
@@ -23,18 +20,18 @@ namespace GeneticAlgorithm.SelectionStrategy
             _criteria = criteria;
         }
 
-        public TOrganism SelectParent(IList<TOrganism> parents)
+        public TOrganism SelectParent(IList<TOrganism> parents, ISelector selector)
         {
             var selectedParents = new List<TOrganism>
                 {
-                    parents[Random.Next(0, parents.Count)],
-                    parents[Random.Next(0, parents.Count)]
+                    parents[selector.SelectInt(parents.Count-1)],
+                    parents[selector.SelectInt(parents.Count-1)]
                 };
 
             var orderedParents = selectedParents.OrderByDescending(
                 organism => new CriteriaCalculator<TOrganism, TChromosome>(organism, _criteria).Calculate().Score);
 
-            if (Random.NextDouble() < _selectionLimit)
+            if (selector.SelectDouble() < _selectionLimit)
             {
                 return orderedParents.First();
             }

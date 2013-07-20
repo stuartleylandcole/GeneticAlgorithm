@@ -3,6 +3,7 @@ using System.Linq;
 using GeneticAlgorithm.Criteria;
 using GeneticAlgorithm.CrossoverStrategy;
 using GeneticAlgorithm.SelectionStrategy;
+using GeneticAlgorithm.SelectionStrategy.Selectors;
 
 namespace GeneticAlgorithm
 {
@@ -12,15 +13,18 @@ namespace GeneticAlgorithm
         private readonly int _numberOfChildrenToCreate;
         private readonly ICrossoverStrategy<TOrganism, TChromosome> _crossoverStrategy;
         private readonly ISelectionStrategy<TOrganism, TChromosome> _selectionStrategy;
+        private readonly ISelector _selector;
 
         public PopulationGenerator(List<TOrganism> parents, int numberOfChildrenToCreate, 
                                   ICrossoverStrategy<TOrganism, TChromosome> crossoverStrategy, 
-                                  ISelectionStrategy<TOrganism, TChromosome> selectionStrategy)
+                                  ISelectionStrategy<TOrganism, TChromosome> selectionStrategy,
+                                  ISelector selector)
         {
             _parents = parents;
             _numberOfChildrenToCreate = numberOfChildrenToCreate;
             _crossoverStrategy = crossoverStrategy;
             _selectionStrategy = selectionStrategy;
+            _selector = selector;
         }
 
         public List<TOrganism> Generate()
@@ -28,8 +32,8 @@ namespace GeneticAlgorithm
             var newPopulation = new List<TOrganism>();
             for (int i = 0; i < _numberOfChildrenToCreate; i++)
             {
-                var parent1 = _selectionStrategy.SelectParent(_parents);
-                var parent2 = _selectionStrategy.SelectParent(_parents);
+                var parent1 = _selectionStrategy.SelectParent(_parents, _selector);
+                var parent2 = _selectionStrategy.SelectParent(_parents, _selector);
 
                 var child = _crossoverStrategy.CrossOver(parent1, parent2);
                 newPopulation.Add(child);

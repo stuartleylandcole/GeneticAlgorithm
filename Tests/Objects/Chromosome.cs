@@ -9,5 +9,10 @@ namespace Tests.Objects
     public class Chromosome : IChromosome
     {
         public IEnumerable<IGene> Genes { get; set; }
+
+        public override string ToString()
+        {
+            return "[" + string.Join(", ", Genes) + "]";
+        }
     }
 }

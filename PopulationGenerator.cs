@@ -29,17 +29,7 @@ namespace GeneticAlgorithm
 
         public List<TOrganism> Generate()
         {
-            var newPopulation = new List<TOrganism>();
-            for (int i = 0; i < _numberOfChildrenToCreate; i++)
-            {
-                var parent1 = _selectionStrategy.SelectParent(_parents, _selector);
-                var parent2 = _selectionStrategy.SelectParent(_parents, _selector);
-
-                var child = _crossoverStrategy.CrossOver(parent1, parent2);
-                newPopulation.Add(child);
-            }
-
-            return newPopulation;
+            return _crossoverStrategy.CreateNewPopulation(_parents, _selectionStrategy, _selector, 100).ToList();
         }
 
         public string GetStatistics(IEnumerable<CriteriaBase<TOrganism, TChromosome>> criteria)

@@ -8,6 +8,11 @@ namespace Tests.Objects
 {
     public class Organism : IOrganism<Chromosome>
     {
-        public IEnumerable<Chromosome> Chromosomes { get; set; }
+        public IList<Chromosome> Chromosomes { get; set; }
+
+        public override string ToString()
+        {
+            return "{" + string.Join(", ", Chromosomes) + "}";
+        }
     }
 }

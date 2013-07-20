@@ -5,50 +5,43 @@ using System.Text;
 using FizzWare.NBuilder;
 using GeneticAlgorithm;
 using GeneticAlgorithm.CrossoverStrategy;
+using GeneticAlgorithm.SelectionStrategy;
 using NUnit.Framework;
 using Tests.Objects;
+using Tests.SelectionStrategyTests;
 
 namespace Tests.CrossoverTests
 {
     [TestFixture]
     public class TimetableCrossoverTests
     {
-        private Organism _parent1;
-        private Organism _parent2;
+        private IList<Organism> _population;
+        private IList<Organism> _newPopulation;
+        private const int NumberOfChildrenToCreate = 100;
 
         [SetUp]
         public void Init()
         {
             var populationGenerator = new TestPopulationGenerator();
             populationGenerator.Generate();
-            _parent1 = populationGenerator.Organisms[0];
-            _parent2 = populationGenerator.Organisms[1];
+            _population = populationGenerator.Organisms;
+
+            var crossover = new TimetableCrossover<Organism, Chromosome>();
+            _newPopulation = crossover.CreateNewPopulation(_population,
+                                                           new SimpleSelectionStrategy<Organism, Chromosome>(),
+                                                           new ConsistentSelector(), NumberOfChildrenToCreate);
         }
 
         [Test]
-        public void TestAllGenesFromParentsAreScheduledOrInUnschedulableList()
+        public void TestCorrectNumberOfChildrenCreated()
         {
-            var crossover = new TimetableCrossover<Organism, Chromosome>();
-            var child = crossover.CrossOver(_parent1, _parent2);
+            Assert.AreEqual(NumberOfChildrenToCreate, _newPopulation.Count);
+        }
 
-            var allGenesFromParents = new HashSet<IGene>();
-            foreach (var c in _parent1.Chromosomes)
-            {
-                allGenesFromParents.UnionWith(c.Genes);
-            }
-
-            foreach (var c in _parent2.Chromosomes)
-            {
-                allGenesFromParents.UnionWith(c.Genes);
-            }
-
-            var allGenesForChild = new HashSet<IGene>();
-            foreach (var c in child.Chromosomes)
-            {
-                allGenesForChild.UnionWith(c.Genes);
-            }
-
-            Assert.AreEqual(allGenesForChild, allGenesFromParents);
+        [Test]
+        public void TestNewPopulationDoesNotContainAnyFromCurrentPopulation()
+        {
+            Assert.That(_population, Is.Not.SubsetOf(_population));
         }
     }
 }

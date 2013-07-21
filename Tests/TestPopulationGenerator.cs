@@ -30,10 +30,10 @@ namespace Tests
                 .ToList();
 
             _organisms = Builder<Organism>
-                .CreateListOfSize(100)
+                .CreateListOfSize(5)
                 .All()
                 .With(o => o.Chromosomes = Pick<Chromosome>
-                    .UniqueRandomList(With.Exactly(80).Elements)
+                    .UniqueRandomList(With.Exactly(10).Elements)
                     .From(_chromosomes))
                 .Build()
                 .ToList();

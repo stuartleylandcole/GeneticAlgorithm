@@ -50,6 +50,7 @@
     <Compile Include="Objects\Chromosome.cs" />
     <Compile Include="Objects\Gene.cs" />
     <Compile Include="Objects\Organism.cs" />
+    <Compile Include="PopulationGeneratorTests.cs" />
     <Compile Include="TestPopulationGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectionStrategyTests\ConsistentSelector.cs" />

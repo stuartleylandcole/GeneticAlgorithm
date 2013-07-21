@@ -1,47 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FizzWare.NBuilder;
-using GeneticAlgorithm;
+﻿using System.Collections.Generic;
+using GeneticAlgorithm.Criteria;
 using GeneticAlgorithm.CrossoverStrategy;
-using GeneticAlgorithm.SelectionStrategy;
 using NUnit.Framework;
 using Tests.Objects;
-using Tests.SelectionStrategyTests;
 
 namespace Tests.CrossoverTests
 {
     [TestFixture]
     public class TimetableCrossoverTests
     {
-        private IList<Organism> _population;
-        private IList<Organism> _newPopulation;
-        private const int NumberOfChildrenToCreate = 100;
-
-        [SetUp]
-        public void Init()
+        [Test]
+        public void TestOffspringIsValid()
         {
-            var populationGenerator = new TestPopulationGenerator();
-            populationGenerator.Generate();
-            _population = populationGenerator.Organisms;
+            //create some criteria
+            var criteria = new List<CriteriaBase<Organism, Chromosome>>();
 
+            //create two parents that can crossover
+            var parent1 = new Organism();
+            var parent2 = new Organism();
+
+            //crossover
             var crossover = new TimetableCrossover<Organism, Chromosome>();
-            _newPopulation = crossover.CreateNewPopulation(_population,
-                                                           new SimpleSelectionStrategy<Organism, Chromosome>(),
-                                                           new ConsistentSelector(), NumberOfChildrenToCreate);
-        }
-
-        [Test]
-        public void TestCorrectNumberOfChildrenCreated()
-        {
-            Assert.AreEqual(NumberOfChildrenToCreate, _newPopulation.Count);
-        }
-
-        [Test]
-        public void TestNewPopulationDoesNotContainAnyFromCurrentPopulation()
-        {
-            Assert.That(_population, Is.Not.SubsetOf(_population));
+            var offspring = crossover.CrossOver(parent1, parent2);
+            
+            //check offspring is valid
+            var criteriaCalculator = new CriteriaCalculator<Organism, Chromosome>(offspring, criteria);
+            var result = criteriaCalculator.Calculate();
+            Assert.True(result.IsValid);
         }
     }
 }

@@ -9,13 +9,13 @@ namespace GeneticAlgorithm
 {
     public class PopulationGenerator<TOrganism, TChromosome> where TOrganism : IOrganism<TChromosome> where TChromosome : IChromosome
     {
-        private readonly List<TOrganism> _parents;
+        private readonly IList<TOrganism> _parents;
         private readonly int _numberOfChildrenToCreate;
         private readonly ICrossoverStrategy<TOrganism, TChromosome> _crossoverStrategy;
         private readonly ISelectionStrategy<TOrganism, TChromosome> _selectionStrategy;
         private readonly ISelector _selector;
 
-        public PopulationGenerator(List<TOrganism> parents, int numberOfChildrenToCreate, 
+        public PopulationGenerator(IList<TOrganism> parents, int numberOfChildrenToCreate, 
                                   ICrossoverStrategy<TOrganism, TChromosome> crossoverStrategy, 
                                   ISelectionStrategy<TOrganism, TChromosome> selectionStrategy,
                                   ISelector selector)
@@ -29,7 +29,18 @@ namespace GeneticAlgorithm
 
         public List<TOrganism> Generate()
         {
-            return _crossoverStrategy.CreateNewPopulation(_parents, _selectionStrategy, _selector, 100).ToList();
+            //return _crossoverStrategy.CreateNewPopulation(_parents, _selectionStrategy, _selector, _numberOfChildrenToCreate).ToList();
+            var newPopulation = new List<TOrganism>();
+            for (int i = 0; i < _numberOfChildrenToCreate; i++)
+            {
+                var parent1 = _selectionStrategy.SelectParent(_parents, _selector);
+                var parent2 = _selectionStrategy.SelectParent(_parents, _selector);
+
+                var child = _crossoverStrategy.CrossOver(parent1, parent2);
+                newPopulation.Add(child);
+            }
+
+            return newPopulation;
         }
 
         public string GetStatistics(IEnumerable<CriteriaBase<TOrganism, TChromosome>> criteria)
